@@ -1,0 +1,4 @@
+TO DO:
+-Define Path
+-set clyde's map somewhere in MapView.js
+-continually add new scripts to MapView.html
