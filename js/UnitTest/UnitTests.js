@@ -187,6 +187,28 @@ test("Map.getShortestPathWithoutPortalsFromAToB test", function () {
 		ok(calculatedPart.equals(expectedPart), "The expected vector was " + expectedPart.toString() +
 			" but the calculated vector was " + calculatedPart.toString());
 	}
+	map = new Map(
+		[
+			new LineSegment(point1, point2),
+			new LineSegment(point2, point3),
+			new LineSegment(point3, point4),
+			new LineSegment(point4, point5),
+			new LineSegment(pointB, pointA)
+		],
+		[]
+	);
+	expectedPathAsArrayOfVectors = [
+		new Vector(pointB.X - pointA.X, pointB.Y - pointA.Y, pointB.Z - pointA.Z)
+	];
+	calculatedPathAsArrayOfVectors = map.getShortestPathWithoutPortalsFromAToB(pointA, pointB).AsArrayOfVectors();
+	ok(calculatedPathAsArrayOfVectors.length === expectedPathAsArrayOfVectors.length,
+		"There were a different number of vectors in the calculated and expected array of vectors.");
+	for (j = 0; j < expectedPathAsArrayOfVectors.length; ++j) {
+		expectedPart = expectedPathAsArrayOfVectors[j];
+		calculatedPart = calculatedPathAsArrayOfVectors[j];
+		ok(calculatedPart.equals(expectedPart), "The expected vector was " + expectedPart.toString() +
+			" but the calculated vector was " + calculatedPart.toString());
+	}
 });
 
 test("MapEvaluator.linesMeetOnlyAtEndPoints test", function () {

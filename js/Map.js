@@ -95,7 +95,7 @@ function Map(linesArg, portals) {
 
 	this.getShortestPathWithoutPortalsFromAToB = function (pointA, pointB) {
 		var linesContainingA, lineContainingA, linesContainingB, j, completePaths, line,
-			shortestPath, distance, currentPath, path1, path2, startingVector;
+			shortestPath, distance, currentPath, path1, path2, startingVector, k;
 		if (!isMapValid) {
 			throw new Error("There are lines that meet each other at points that are not endpoints " +
 				"and that will require code that is more complicated.");
@@ -104,6 +104,19 @@ function Map(linesArg, portals) {
 		linesContainingB = this.getLinesContainingThePoint(pointB);
 		if (linesContainingA.length === 0 || linesContainingB.length === 0) {
 			return undefined;
+		}
+		for (j = 0; j < linesContainingA.length; ++j) {
+			lineContainingA = linesContainingA[j];
+			if (lineContainingA.ContainsPoint(pointB)) {
+				return new Path(
+					pointA,
+					[ new Vector(
+						pointB.X - pointA.X,
+						pointB.Y - pointA.Y,
+						pointB.Z - pointA.Z
+					)]
+				);
+			}
 		}
 
 		if (linesContainingA.length === 1) {
