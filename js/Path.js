@@ -42,6 +42,40 @@ function Path(arg1, arg2) {
 		return true;
 	};
 
+	// Returns position along the path given a distance from
+	// the startPoint.
+	this.getPointAt = function (distance) {
+		var point, tracedDistance, nextVector, magnitude, amountNeeded;
+		if (distance < 0) {
+			throw new Error("You cannot pass a distance of zero to Path.getPointAt.");
+		}
+		if (distance > this.length()) {
+			throw new Error("You cannot pass a distance > Path.length to Path.getPointAt.");
+		}
+		if (distance === 0) {
+			return startPoint;
+		}
+		point = startPoint;
+		tracedDistance = 0;
+		for (j = 0; j < arrayOfVectors.length; ++j) {
+			nextVector = arrayOfVectors[j];
+			magnitude = nextVector.Magnitude();
+			if (tracedDistance + magnitude === distance) {
+				point = point.plus(nextVector);
+				break;
+			}
+			if (tracedDistance + magnitude > distance) {
+				amountNeeded = (distance - tracedDistance) / magnitude;
+				point = point.plus(nextVector.Times(amountNeeded));
+				break;
+			} else {
+				point = point.plus(nextVector);
+				tracedDistance += magnitude;
+			}
+		}
+		return point;
+	};
+
 	this.length = function () {
 		var j, length;
 		for (j = 0; j < arrayOfVectors.length; ++j) {

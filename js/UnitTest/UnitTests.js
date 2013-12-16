@@ -1,4 +1,4 @@
-var test, ok, Vector, LineSegment, Point, Map, MapEvaluator;
+var test, ok, Vector, LineSegment, Point, Map, MapEvaluator, Path;
 
 test("dot test", function () {
 	var vector1, vector2, vector3, calculated, expected;
@@ -227,4 +227,30 @@ test("MapEvaluator.linesMeetOnlyAtEndPoints test", function () {
 	ok(mapEvaluator.linesMeetOnlyAtEndPoints(),
 		"mapEvaluator says that the map has lines that touch at points that are not endpoints, " +
 		"but that is not the case.");
+});
+
+test("Path.getPointAt test", function () {
+	var path, returnedPoint, pathVector, testDistance, delta, expectedPoint;
+	pathVector = new Vector(5, 5);
+	path = new Path(
+		new Point(3, 3),
+		[
+			pathVector
+		]
+	);
+	returnedPoint = path.getPointAt(0);
+	ok(returnedPoint.equals(path.startPoint()),
+		"getPointAt(0) returned the point " + returnedPoint.X +
+		", " + returnedPoint.Y);
+	testDistance = 3.72;
+	returnedPoint = path.getPointAt(testDistance);
+	delta = Math.sqrt(Math.pow(3.72, 2) / 2);
+	expectedPoint = new Point(3 + delta, 3 + delta);
+	ok(returnedPoint.equals(expectedPoint),
+		"returned point != expected point for distance = " + testDistance);
+	testDistance = path.length();
+	returnedPoint = path.getPointAt(testDistance);
+	expectedPoint = new Point(path.startPoint().X + pathVector.X, path.startPoint().Y + pathVector.Y);
+	ok(returnedPoint.equals(expectedPoint),
+		"returned point != expected point for distance = " + testDistance);
 });

@@ -15,9 +15,9 @@ function Clyde() {
 			//some default path for when we have no map
 			return;
 		}
-		shortestPathToPacman = map.GetShortestPathFromAToB(pacmansPosition);
+		shortestPathToPacman = map.getShortestPathFromAToB(position, pacmansPosition);
 		if (undefined === shortestPathToPacman) {
-			//path that causes you to pace on line that will bring you closest
+			throw new Error("Clyde.js says 'There is no way to get to Pacman!'");
 		} else {
 			currentPath = shortestPathToPacman;
 		}
@@ -42,7 +42,7 @@ function Clyde() {
 	};
 
 	this.FollowPath = function (path, distance) {
-		this.Position(path.GetPointAt(distance));
+		this.Position(path.getPointAt(distance));
 	};
 
 	this.ObserveEnemy = function (enemy) {

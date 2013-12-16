@@ -26,4 +26,7 @@ function Point(x, y, z) {
 			Math.pow(point.Z - this.Z, 2)
 		);
 	};
+	this.plus = function (point) {
+		return new Point(this.X + point.X, this.Y + point.Y, this.Z + point.Z);
+	};
 }

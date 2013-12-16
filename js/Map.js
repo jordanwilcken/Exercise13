@@ -35,12 +35,16 @@ function Map(linesArg, portals) {
 
 	this.getShortestPathFromAToB = function (pointA, pointB) {
 		var portalPath, nonPortalPath;
-		portalPath = this.getShortestPathWithPortalsFromAToB(pointA, pointB);
-		portalPath = this.getShortestPathWithoutPortalsFromAToB(pointA, pointB);
+		portalPath = undefined; //this.getShortestPathWithPortalsFromAToB(pointA, pointB);
+		nonPortalPath = this.getShortestPathWithoutPortalsFromAToB(pointA, pointB);
+		if (undefined !== portalPath && portalPath.length() < nonPortalPath.length()) {
+			return portalPath;
+		}
+		return nonPortalPath;
 	};
 
 	this.getShortestPathWithPortalsFromAToB = function (pointA, pointB) {
-		return undefined;
+		throw new Error("Map.getShortestPathWithPortalsFromAToB is not yet implemented.");
 	};
 
 	completePathToPoint = function (path, point, visitedLines) {
