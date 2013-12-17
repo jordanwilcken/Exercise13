@@ -1,15 +1,19 @@
 var $, Map, makeMapLines, makeMapPortals, Judge, ObjectThatDraws, TimeSpan, LineSegment, Point,
-	Pacman, Clyde;
+	Pacman, Clyde, Game;
 
 $(function () {
 	var map, thingsToDrawOnMap, judge, objectThatDraws, onTwentyMillisecondTimeout,
 		twentyMillisecondTimeoutID,	on100MillisecondTimeout, timeBetweenCalls, j,
-		the100MillisecondTimeoutID, pacman, theCanvas, clyde, thingsThatCareAboutThePassageOfTime;
+		the100MillisecondTimeoutID, pacman, theCanvas, clyde, thingsThatCareAboutThePassageOfTime,
+		game;
 
 	pacman = new Pacman();
 	clyde = new Clyde();
 	map = new Map(makeMapLines(), makeMapPortals());
+	clyde.Map(map);
 	clyde.Position(map.GetPointClosestTo(new Point(0, 0)));
+	clyde.observeEnemy(pacman);
+	clyde.ChoosePath();
 
 	theCanvas = $("#theCanvas");
 	theCanvas.attr("width", "500");
@@ -28,7 +32,9 @@ $(function () {
 		clyde
 	];
 
-	judge = new Judge();
+	game = new Game(pacman, { Clyde: clyde }, map);
+
+	judge = new Judge(game);
 
 	thingsThatCareAboutThePassageOfTime = [
 		judge,
@@ -45,13 +51,14 @@ $(function () {
 			timeBetweenCalls = new Date() - this.TimeOfPreviousCall;
 			this.TimeOfPreviousCall = new Date();
 			timeSpan = new TimeSpan(timeBetweenCalls, "ms");
+			clyde.observeEnemy(pacman);
 			for (j = 0; j < thingsThatCareAboutThePassageOfTime.length; ++j) {
 				thingsThatCareAboutThePassageOfTime[j].ResolveTimePassing(timeSpan);
 			}
 		}
-		setTimeout(onTwentyMillisecondTimeout, 20);
+		setTimeout(onTwentyMillisecondTimeout, 25);
 	};
-	twentyMillisecondTimeoutID = setTimeout(onTwentyMillisecondTimeout, 20);
+	twentyMillisecondTimeoutID = setTimeout(onTwentyMillisecondTimeout, 25);
 
 	on100MillisecondTimeout = function () {
 		if (undefined === this.TimeOfPreviousCall) {
@@ -65,9 +72,9 @@ $(function () {
 				thingsToDrawOnMap[j].Draw();
 			}
 		}
-		setTimeout(on100MillisecondTimeout, 100);
+		setTimeout(on100MillisecondTimeout, 50);
 	};
-	the100MillisecondTimeoutID = setTimeout(on100MillisecondTimeout, 100);
+	the100MillisecondTimeoutID = setTimeout(on100MillisecondTimeout, 50);
 });
 
 function makeMapLines() {

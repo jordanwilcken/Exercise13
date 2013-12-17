@@ -1,7 +1,7 @@
-var Vector;
+var Vector, Line, Point;
 
 function Path(arg1, arg2) {
-	var arrayOfVectors, toCopy, j, startPoint, endPoint;
+	var arrayOfVectors, toCopy, j, startPoint;
 	this.AppendVector = function (vector) {
 		arrayOfVectors.push(vector);
 	};
@@ -40,6 +40,30 @@ function Path(arg1, arg2) {
 			}
 		}
 		return true;
+	};
+
+	this.getDistanceAtPoint = function (point) {
+		var point1, vector, j, distance, line, t;
+		distance = 0;
+		if (point.equals(startPoint)) {
+			return 0;
+		}
+		if (point.equals(this.endPoint())) {
+			return this.length();
+		}
+		point1 = new Point(startPoint);
+		for (j = 0; j < arrayOfVectors.length; ++j) {
+			vector = arrayOfVectors[j];
+			line = new LineSegment(point1, point1.plus(vector));
+			t = {};
+			if (line.ContainsPoint(point, t)) {
+				distance += line.Length() * t.value;
+				return distance;
+			}
+			distance += line.Length();
+			point1 = line.Point2;
+		}
+		throw new Error("The path does not contain the point you passed to getDistanceAtPoint");
 	};
 
 	// Returns position along the path given a distance from

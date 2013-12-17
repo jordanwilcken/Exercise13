@@ -145,7 +145,7 @@ function Map(linesArg, portals) {
 					)
 				]
 			);
-			completePaths = this.completePathToPoint(path1, pointB, linesContainingA);
+			completePaths = completePathToPoint(path1, pointB, linesContainingA.slice());
 			for (j = 0; j < completePaths.length; ++j) {
 				currentPath = completePaths[j];
 				if (distance === undefined || currentPath.length() < distance) {
@@ -154,7 +154,7 @@ function Map(linesArg, portals) {
 				}
 			}
 			if (!path1.equals(path2)) {
-				completePaths = this.completePathToPoint(path2, pointB, linesContainingA);
+				completePaths = completePathToPoint(path2, pointB, linesContainingA.slice());
 				for (j = 0; j < completePaths.length; ++j) {
 					currentPath = completePaths[j];
 					if (distance === undefined || currentPath.length() < distance) {
@@ -183,7 +183,7 @@ function Map(linesArg, portals) {
 					pointA,
 					[startingVector]
 				);
-				completePaths = completePathToPoint(path1, pointB, linesContainingA);
+				completePaths = completePathToPoint(path1, pointB, linesContainingA.slice());
 				for (k = 0; k < completePaths.length; ++k) {
 					currentPath = completePaths[k];
 					if (distance === undefined || currentPath.length() < distance) {
@@ -198,8 +198,8 @@ function Map(linesArg, portals) {
 
 	this.Draw = function () {
 		var j;
-		for (j = 0; j < this.lines.length; ++j) {
-			objectThatDraws.DrawLine(this.lines[j]);
+		for (j = 0; j < lines.length; ++j) {
+			objectThatDraws.DrawLine(lines[j]);
 		}
 	};
 

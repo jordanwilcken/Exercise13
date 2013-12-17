@@ -1,23 +1,11 @@
 function Point(x, y, z) {
 	var toCopy;
-	if (arguments.length === 1) {
-		toCopy = x;
-		return new Point(toCopy.x, toCopy.y, toCopy.z);
-	}
-
 	this.equals = function (point) {
 		return this.X === point.X &&
 				this.Y === point.Y &&
 				this.Z === point.Z;
 	};
 
-	this.X = x;
-	this.Y = y;
-	if (undefined === z) {
-		this.Z = 0;
-	} else {
-		this.Z = z;
-	}
 
 	this.DistanceTo = function (point) {
 		return Math.sqrt(
@@ -29,4 +17,19 @@ function Point(x, y, z) {
 	this.plus = function (point) {
 		return new Point(this.X + point.X, this.Y + point.Y, this.Z + point.Z);
 	};
+
+	if (arguments.length === 1) {
+		toCopy = x;
+		this.X = toCopy.X;
+		this.Y = toCopy.Y;
+		this.Z = toCopy.Z;
+	} else {
+		this.X = x;
+		this.Y = y;
+		if (undefined === z) {
+			this.Z = 0;
+		} else {
+			this.Z = z;
+		}
+	}
 }

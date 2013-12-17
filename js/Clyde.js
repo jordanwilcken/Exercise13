@@ -1,12 +1,12 @@
 var Circle, Pacman, Point, ObjectThatDraws, Path;
 
 function Clyde() {
-	var position, circle, strokeColor, fillColor, objectThatDraws, map,
+	var circle, strokeColor, fillColor, objectThatDraws, map,
 		speedInPixelsPerMS, currentPath, pacmansPosition;
 	strokeColor = fillColor = "red";
-	circle = new Circle(position, 20);
+	circle = new Circle(new Point(0, 0), 20);
 	objectThatDraws = new ObjectThatDraws();
-	speedInPixelsPerMS = 20 / 1000;
+	speedInPixelsPerMS = 60 / 1000;
 
 	this.ChoosePath = function () {
 		var shortestPathToPacman, map;
@@ -15,9 +15,12 @@ function Clyde() {
 			//some default path for when we have no map
 			return;
 		}
-		shortestPathToPacman = map.getShortestPathFromAToB(position, pacmansPosition);
+		if (undefined === pacmansPosition) {
+			throw new Error("Clyde doesn't know where Pacman is.");
+		}
+		shortestPathToPacman = map.getShortestPathFromAToB(this.Position(), pacmansPosition);
 		if (undefined === shortestPathToPacman) {
-			throw new Error("Clyde.js says 'There is no way to get to Pacman!'");
+			//throw new Error("Clyde.js says 'There is no way to get to Pacman!'");
 		} else {
 			currentPath = shortestPathToPacman;
 		}
@@ -42,11 +45,17 @@ function Clyde() {
 	};
 
 	this.FollowPath = function (path, distance) {
-		this.Position(path.getPointAt(distance));
+		var newDistance;
+		newDistance = path.getDistanceAtPoint(this.Position()) + distance;
+		if (newDistance > path.length()) {
+			this.Position(path.endPoint());
+		} else {
+			this.Position(path.getPointAt(newDistance));
+		}
 	};
 
-	this.ObserveEnemy = function (enemy) {
-		if(typeof enemy === typeof Pacman) {
+	this.observeEnemy = function (enemy) {
+		if (enemy instanceof Pacman) {
 			pacmansPosition = enemy.Position();
 		} else {
 			pacmansPosition = undefined;
@@ -54,6 +63,13 @@ function Clyde() {
 	};
 
 	this.ResolveTimePassing = function (timeSpan) {
-		FollowPath(currentPath, speedInPixelsPerMS * timeSpan.ToMilliseconds());
+		var milliseconds;
+		milliseconds = timeSpan.ToMilliseconds();
+		if (milliseconds === 0) {
+			return;
+		}
+		if (undefined !== currentPath) {
+			this.FollowPath(currentPath, speedInPixelsPerMS * milliseconds);
+		}
 	};
 }
