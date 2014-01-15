@@ -1,4 +1,4 @@
-var $M;
+var $M, isNaN;
 
 function MapEvaluator() {
 	var map, directionsAreProportional, getPointOfIntersection;
@@ -54,7 +54,7 @@ function MapEvaluator() {
 			if (t1 < 0 || t1 > 1) { return undefined; }
 			s1 = (upperTriangular.e(1, 3) / upperTriangular.e(1, 1)) -
 					(upperTriangular.e(1, 2) * s1 / upperTriangular.e(1, 1));
-			if (s1 < 0 || s1 > 1) { return undefined; }
+			if (isNaN(s1) || s1 < 0 || s1 > 1) { return undefined; }
 		}
 		/* Now solving the equations
 		 * y1 + bt = y2 + es

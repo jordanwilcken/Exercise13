@@ -49,7 +49,7 @@ function Map(linesArg, portals) {
 
 	completePathToPoint = function (path, point, visitedLines) {
 		var pathAsArrayOfVectors, currentEndPoint, completePaths, subsetOfCompletePaths, pathCopy,
-			newPieceOfPath, lastPieceOfPath, line, connectedLines, j;
+			newPieceOfPath, lastPieceOfPath, line, connectedLines, j, visitedLinesCopy;
 		completePaths = [];
 		currentEndPoint = path.endPoint();
 		connectedLines = me.getLinesContainingThePoint(currentEndPoint);
@@ -67,7 +67,6 @@ function Map(linesArg, portals) {
 				);
 				pathCopy.AppendVector(lastPieceOfPath);
 				completePaths.push(pathCopy);
-				visitedLines.push(line);
 			} else {
 				if (!isMapValid) {
 					throw new Error("There are lines that meet each other at points that are not endpoints " +
@@ -87,8 +86,9 @@ function Map(linesArg, portals) {
 					);
 				}
 				pathCopy.AppendVector(newPieceOfPath);
-				visitedLines.push(line);
-				subsetOfCompletePaths = completePathToPoint(pathCopy, point, visitedLines);
+				visitedLinesCopy = visitedLines.slice();
+				visitedLinesCopy.push(line);
+				subsetOfCompletePaths = completePathToPoint(pathCopy, point, visitedLinesCopy);
 				while (subsetOfCompletePaths.length > 0) {
 					completePaths.push(subsetOfCompletePaths.shift());
 				}

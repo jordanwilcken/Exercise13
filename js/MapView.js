@@ -82,7 +82,8 @@ function makeMapLines() {
 		new LineSegment(new Point(30, 30), new Point(30, 470)),
 		new LineSegment(new Point(30, 470), new Point(470, 470)),
 		new LineSegment(new Point(470, 470), new Point(470, 30)),
-		new LineSegment(new Point(470, 30), new Point(30, 30))
+		new LineSegment(new Point(470, 30), new Point(30, 30)),
+		new LineSegment(new Point(30, 470), new Point(200, 200))
 	];
 }
 
