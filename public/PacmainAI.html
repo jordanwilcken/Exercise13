@@ -1,9 +1,13 @@
+<!doctype html>
+<html>
+<title>The Quintessential Social Pacman</title>
 <head>
 	<link rel="stylesheet" href="">
-</head>
-<body>
-	<canvas id="theCanvas"></canvas>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/jq/jquery.event.ue/jquery.event.ue.js"></script>
+
+	<script src="js/pacmanAI.js"></script>
+	<script src="js/pacmanAI.util.js"></script>
 	<script src="js/Point.js"></script>
 	<script src="js/Vector.js"></script>
 	<script src="js/ThirdParty/matrix.js"></script>
@@ -18,5 +22,14 @@
 	<script src="js/MapEvaluator.js"></script>
 	<script src="js/TimeSpan.js"></script>
 	<script src="js/Judge.js"></script>
-	<script src="js/MapView.js"></script>
-</body
+	<script src="js/pacmanAI.shell.js"></script>
+	<script src="js/pacmanAI.ghostList.js"></script>
+	<script src="js/pacmanAI.map.js"></script>
+	<script>
+	  $(function () { pacmanAI.initModule($('#pacmanAI')); });
+	</script>
+</head>
+</body>
+  <div id="pacmanAI"></div>
+<body>
+</html>
