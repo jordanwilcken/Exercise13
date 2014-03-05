@@ -10,7 +10,7 @@ $(function () {
 	pacman = new Pacman();
 	clyde = new Clyde();
 	map = new Map(makeMapLines(), makeMapPortals());
-	clyde.Map(map);
+	clyde.set_Map(map);
 	clyde.Position(map.GetPointClosestTo(new Point(0, 0)));
 	clyde.observeEnemy(pacman);
 	clyde.ChoosePath();

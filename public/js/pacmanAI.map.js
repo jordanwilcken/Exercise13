@@ -121,7 +121,7 @@ pacmanAI.map = (function () {
       pacman.Position(map.GetPointClosestTo(pointClicked));
     });
 
-    clyde.Map(map);
+    clyde.set_Map(map);
     clyde.Position(map.GetPointClosestTo(new Point(0, 0)));
     clyde.observeEnemy(pacman);
     clyde.ChoosePath();

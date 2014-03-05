@@ -19,11 +19,21 @@ pacmanAI.ghostList = (function () {
   'use strict';
   //---------------- BEGIN MODULE SCOPE VARIABLES --------------
   var
-    configMap = {},
+    configMap = {
+      main_html : String()
+        + '<div id="ghost_list"></div>'
+        + '<div id="add_ghost">Add</div>'
+        + '<div id="delete_ghost">Delete</div>',
+      settable_map : {
+        map_model     : true,
+        on_tap_add    : true,
+        on_tap_delete : true
+      }
+    },
     stateMap  = {},
     jqueryMap = {},
 
-    setJqueryMap, configModule, initModule;
+    setJqueryMap, configModule, initModule, onTapAdd, onTapDelete;
   //----------------- END MODULE SCOPE VARIABLES ---------------
 
   //------------------- BEGIN UTILITY METHODS ------------------
@@ -42,6 +52,49 @@ pacmanAI.ghostList = (function () {
 
   //------------------- BEGIN EVENT HANDLERS -------------------
   // example: onClickButton = ...
+
+  onListChange = function (evnt) {
+    var
+      list_html = String(),
+      ghost_db = configMap.ghosts_model.get_db(),
+      selected_ghosts = configMap.ghosts_model.get_selected_ghosts();
+
+      ghost_db.each (function (ghost, idx) {
+        var select_class = '';
+
+        selected_ghosts.each(function (selected, idx) {
+          if (ghost && ghost.id === selected.id) {
+            select_class = '-x-select';
+          }
+        });
+
+        list_html
+          += '<div class="pacmanAI-ghostList-item' +  select_class + '"'
+          +  ' data-id="' + ghost.id + '">'
+          +  pacmanAI.util_b.encodeHtml(ghost.name) + '</div>';
+      });
+
+      jqueryMap.$list.html(list_html);
+  };
+
+  onTapAdd = function (evnt) {
+    configMap.on_tap_add();
+  };
+
+  onTapDelete = function (evnt) {
+    var
+      ghost_db, 
+      selectedGhosts = configMap.ghosts_model.get_selected_ghosts();
+    if (selectedGhosts.length === 0)
+    {
+      return;
+    }
+
+    //if they confirm the delete
+    ghost_db = configMap.ghosts_model.get_db();
+    //use ghost_db to remove those ghosts
+  };
+
   //-------------------- END EVENT HANDLERS --------------------
 
 
@@ -75,9 +128,24 @@ pacmanAI.ghostList = (function () {
   initModule = function ( $container ) {
     stateMap.$container = $container;
     setJqueryMap();
+    
+    $container.html(configMap.main_html);
+    jqueryMap.$list = $("#ghost_list");
+    $("#add_ghost").on("utap", onTapAdd);
+    $("#delete_ghost").on("utap", onTapDelete);
     return true;
   };
   // End public method /initModule/
+
+  // Begin public method /getSelectedGhosts/
+  // Purpose    : To expose which ghosts are selected
+  // Arguments  : none
+  // Returns    : An array of ghosts
+  // Throws     : none
+  //
+  getSelectedGhosts = function () {
+    selected = 
+  };
 
   // return public methods
   return {
