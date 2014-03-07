@@ -10,7 +10,7 @@ function Clyde() {
 
 	this.ChoosePath = function () {
 		var shortestPathToPacman, map;
-		map = this.Map();
+		map = this.get_Map();
 		if (undefined === map) {
 			//some default path for when we have no map
 			return;
@@ -26,9 +26,9 @@ function Clyde() {
 		}
 	};
 
-  this.get_Map = function() {
+  this.get_Map = function () {
     return map;
-  }
+  };
 
 	this.set_Map = function (value) {
 		if (arguments.length === 0) {

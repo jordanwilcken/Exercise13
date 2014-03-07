@@ -1,11 +1,3 @@
-/*
- * module_template.js
- * Template for browser feature modules
- *
- * Michael S. Mikowski - mike.mikowski@gmail.com
- * Copyright (c) 2011-2012 Manning Publications Co.
-*/
-
 /*jslint         browser : true, continue : true,
   devel  : true, indent  : 2,    maxerr   : 50,
   newcap : true, nomen   : true, plusplus : true,
@@ -13,7 +5,7 @@
   white  : true
 */
 
-/*global $, pacmanAI */
+/*global $, pacmanAI, TAFFY */
 
 pacmanAI.fake = (function () {
   'use strict';
@@ -23,37 +15,13 @@ pacmanAI.fake = (function () {
     stateMap  = {},
     jqueryMap = {},
 
-    setJqueryMap, getGhostList;
+    setJqueryMap, getGhostList, mockSio;
   //----------------- END MODULE SCOPE VARIABLES ---------------
-
-  //------------------- BEGIN UTILITY METHODS ------------------
-  // example : getTrimmedString
-  //-------------------- END UTILITY METHODS -------------------
-
-  //--------------------- BEGIN DOM METHODS --------------------
-  // Begin DOM method /setJqueryMap/
-  setJqueryMap = function () {
-    var $container = stateMap.$container;
-
-    jqueryMap = { $container : $container };
-  };
-  // End DOM method /setJqueryMap/
-  //---------------------- END DOM METHODS ---------------------
 
   //------------------- BEGIN EVENT HANDLERS -------------------
   // example: onClickButton = ...
   //-------------------- END EVENT HANDLERS --------------------
 
-
-
-  //------------------- BEGIN PUBLIC METHODS -------------------
-
-  // Begin public method /getGhostList/
-  // Purpose    : Gets a list of ghosts for testing purposes
-  // Arguments  :
-  // Returns    : A collection of ghosts
-  // Throws     : none
-  //
   getGhostList = function () {
     return [
       { name : 'Bill',
@@ -77,11 +45,43 @@ pacmanAI.fake = (function () {
       }
     ];
   };
-  // End public method /getGhostList/
 
-  // return public methods
+  mockSio = (function () {
+    var
+      emit, on,
+      ghostTaffy = TAFFY(),
+      callbackMap = {};
+    
+    emit = function (eventName, data) {
+      if (eventName === 'addghost') {
+        setTimeout(function () {
+          ghostTaffy.insert(data);
+          callbackMap.listchange([ghostTaffy().get()]);
+        }, 1000); 
+        return;
+      }
+      if (eventName ==='deleteghost') {
+        setTimeout(function () {
+          ghostTaffy({ name : data.name }).remove();
+          callbackMap.listchange([ghostTaffy().get()]);
+        }, 1000); 
+        return;
+      }
+    };
+
+    on = function (eventName, callback) {
+      callbackMap[eventName] = callback;
+    };
+
+    return {
+      emit : emit,
+      on   : on
+    };
+  }());
+
   return {
-    getGhostList : getGhostList
+    getGhostList : getGhostList,
+    mockSio      : mockSio
   };
   //------------------- END PUBLIC METHODS ---------------------
 }());

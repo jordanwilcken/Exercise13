@@ -13,7 +13,7 @@
   white  : true
 */
 
-/*global $, pacmanAI */
+/*global $, TAFFY, pacmanAI */
 
 pacmanAI.ghostList = (function () {
   'use strict';
@@ -21,10 +21,15 @@ pacmanAI.ghostList = (function () {
   var
     configMap = {
       main_html : String()
-        + '<div id="ghost_list"></div>'
-        + '<div id="add_ghost">Add</div>'
-        + '<div id="delete_ghost">Delete</div>',
+        + '<div class="pacmanAI-ghostList-list"></div>'
+        + '<div class="pacmanAI-ghostList-buttons">'
+          + '<div class="pacmanAI-ghostList-add">Add</div>'
+          + '<div class="pacmanAI-ghostList-delete">Delete</div>'
+          + '<div class="pacmanAI-ghostList-admit">Admit to Map</div>'
+          + '<div class="pacmanAI-ghostList-eject">Remove from Map</div>'
+        + '</div>',
       settable_map : {
+        ghosts_model  : true,
         map_model     : true,
         on_tap_add    : true,
         on_tap_delete : true
@@ -33,11 +38,32 @@ pacmanAI.ghostList = (function () {
     stateMap  = {},
     jqueryMap = {},
 
-    setJqueryMap, configModule, initModule, onTapAdd, onTapDelete;
+    setJqueryMap, configModule,     initModule,       onTapAdd, onTapDelete,
+    onListChange, onSelectedChange, onAdmittedChange, makeListHtml;
   //----------------- END MODULE SCOPE VARIABLES ---------------
 
   //------------------- BEGIN UTILITY METHODS ------------------
   // example : getTrimmedString
+  makeListHtml = function() {
+    var
+      list_html = String(),
+      ghost_taffy = configMap.ghosts_model.get_taffy(),
+      selected_taffy = TAFFY(configMap.ghosts_model.get_selected());
+
+    ghost_taffy().each (function (ghost, idx) {
+      var select_class = '';
+
+      if (selected_taffy(ghost).first()) {
+        select_class = '.pacmanAI-x-select';
+      }
+
+      list_html
+        += '<div class="pacmanAI-ghostList-item' +  select_class + '"'
+        +  ' data-id="' + ghost.name + '">'
+        +  pacmanAI.util_b.encodeHtml(ghost.name) + '</div>';
+    });
+    return list_html;
+  };
   //-------------------- END UTILITY METHODS -------------------
 
   //--------------------- BEGIN DOM METHODS --------------------
@@ -54,27 +80,17 @@ pacmanAI.ghostList = (function () {
   // example: onClickButton = ...
 
   onListChange = function (evnt) {
-    var
-      list_html = String(),
-      ghost_db = configMap.ghosts_model.get_db(),
-      selected_ghosts = configMap.ghosts_model.get_selected_ghosts();
+      jqueryMap.$list.html(makeListHtml());
+  };
 
-      ghost_db.each (function (ghost, idx) {
-        var select_class = '';
+  onSelectedChange = function (evnt) {
+    $('div', jqueryMap.$container).each(function (itemDiv, idx) {
+      //if the selected taffy has a guy with your name you are selected
+      //otherwise you are not.
+    });
+  };
 
-        selected_ghosts.each(function (selected, idx) {
-          if (ghost && ghost.id === selected.id) {
-            select_class = '-x-select';
-          }
-        });
-
-        list_html
-          += '<div class="pacmanAI-ghostList-item' +  select_class + '"'
-          +  ' data-id="' + ghost.id + '">'
-          +  pacmanAI.util_b.encodeHtml(ghost.name) + '</div>';
-      });
-
-      jqueryMap.$list.html(list_html);
+  onAdmittedChange = function (evnt) {
   };
 
   onTapAdd = function (evnt) {
@@ -130,22 +146,15 @@ pacmanAI.ghostList = (function () {
     setJqueryMap();
     
     $container.html(configMap.main_html);
-    jqueryMap.$list = $("#ghost_list");
-    $("#add_ghost").on("utap", onTapAdd);
-    $("#delete_ghost").on("utap", onTapDelete);
+    jqueryMap.$list = $('.pacmanAI-ghostList-list');
+    jqueryMap.$add = $('.pacmanAI-ghostList-add').on('utap', onTapAdd);
+    jqueryMap.$delete = $('pacmanAI-ghostList-delete').on('utap', onTapDelete);
+    $.gevent.subscribe(jqueryMap.$container, 'pacmanAI-listchange', onListChange);
+    $.gevent.subscribe(jqueryMap.$container, 'selected-ghosts-changed', onSelectedChange);
+    $.gevent.subscribe(jqueryMap.$container, 'admitted-ghosts-changed', onAdmittedChange);
     return true;
   };
   // End public method /initModule/
-
-  // Begin public method /getSelectedGhosts/
-  // Purpose    : To expose which ghosts are selected
-  // Arguments  : none
-  // Returns    : An array of ghosts
-  // Throws     : none
-  //
-  getSelectedGhosts = function () {
-    selected = 
-  };
 
   // return public methods
   return {

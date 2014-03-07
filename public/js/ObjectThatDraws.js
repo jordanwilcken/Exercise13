@@ -1,7 +1,7 @@
 var $;
 
 function ObjectThatDraws() {
-	var canvas = $("#theCanvas")[0];
+	var canvas = $("#pacmanAI-map-theCanvas")[0];
 
 	this.Clear = function() {
 		var context;

@@ -34,7 +34,7 @@ pacmanAI.shell = (function () {
     },
     jqueryMap = {},
 
-    setJqueryMap, configModule, initModule, map, ghostList;
+    setJqueryMap, configModule, initModule, map, ghostList, startGhostCreation;
   //----------------- END MODULE SCOPE VARIABLES ---------------
 
   //------------------- BEGIN UTILITY METHODS ------------------
@@ -46,9 +46,18 @@ pacmanAI.shell = (function () {
   setJqueryMap = function () {
     var $container = stateMap.$container;
 
-    jqueryMap = { $container : $container };
+    jqueryMap = {
+      $container : $container,
+      $modal     : $("#pacmanAI-shell-modal")
+    };
   };
   // End DOM method /setJqueryMap/
+
+  // Begin DOM method /startGhostCreation/
+  startGhostCreation = function () {
+    alert('The user wants to make a ghost');
+  };
+  // End DOM method /startGhostCreation/
   //---------------------- END DOM METHODS ---------------------
 
   //------------------- BEGIN EVENT HANDLERS -------------------
@@ -91,6 +100,10 @@ pacmanAI.shell = (function () {
     jqueryMap.$ghostListContainer = $(".pacmanAI-shell-ghostList");
     jqueryMap.$mapContainer = $(".pacmanAI-shell-map");
 
+    pacmanAI.ghostList.configModule( {
+      ghosts_model : pacmanAI.model.ghosts,
+      on_tap_add   : startGhostCreation
+    });
     pacmanAI.ghostList.initModule(jqueryMap.$ghostListContainer);
     pacmanAI.map.initModule(jqueryMap.$mapContainer);
     return true;

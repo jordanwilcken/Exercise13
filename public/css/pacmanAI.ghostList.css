@@ -1,0 +1,42 @@
+.pacmanAI-ghostList-list, .pacmanAI-ghostList-buttons {
+  position : absolute;
+  top	   	 : 1em;
+  bottom   : 1em;
+  cursor   : default;
+}
+
+.pacmanAI-ghostList-list {
+  border: 2px solid black;
+  left	: 1em;
+}
+
+.pacmanAI-ghostList-item {
+  min-width : 300px;
+  padding   : 5px 0 5px 10px;
+} 
+
+	.pacmanAI-ghostList-item:hover {
+		background-color : #00BFFF;
+	}
+	.pacmanAI-ghostList-item.pacmanAI-x-select {
+    background-color : #6495ED;
+	}
+
+.pacmanAI-ghostList-buttons {
+  right 		: 8em;
+  min-width : 7em;
+}
+
+.pacmanAI-ghostList-add, .pacmanAI-ghostList-delete,
+.pacmanAI-ghostList-admit, .pacmanAI-ghostList-eject {
+  margin				: 0 0 5px 0;
+  text-align		: center;
+  padding				: 0.2em;
+  border				: 1px solid black;
+  border-radius : 0.5em;
+}
+  
+	.pacmanAI-ghostList-add:hover, .pacmanAI-ghostList-delete:hover,
+	.pacmanAI-ghostList-admit:hover, .pacmanAI-ghostList-eject:hover {
+		background-color: #aaa;
+	}

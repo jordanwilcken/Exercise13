@@ -15,7 +15,7 @@ $(function () {
 	clyde.observeEnemy(pacman);
 	clyde.ChoosePath();
 
-	theCanvas = $("#theCanvas");
+	theCanvas = $("#pacmanAI-map-theCanvas");
 	theCanvas.attr("width", "500");
 	theCanvas.attr("height", "500");
 	theCanvas.on("click", function (event) {

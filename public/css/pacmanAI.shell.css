@@ -1,0 +1,6 @@
+.pacmanAI-shell-ghostList {
+  border  		: 2px solid black;
+  border-radius	: 20px;
+  height		: 200px;
+  position		: relative;
+}

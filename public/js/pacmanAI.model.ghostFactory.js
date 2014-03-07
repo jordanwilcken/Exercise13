@@ -94,6 +94,7 @@ pacmanAI.model.ghostFactory = (function () {
     if (attr_map.hasOwnProperty('fillColor') && attr_map.name.length > 0) {
       theGhost.fillColor = attr_map.fillColor;
     }
+    return theGhost;
   };
 
   return {

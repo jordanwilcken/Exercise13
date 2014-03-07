@@ -21,7 +21,7 @@ pacmanAI.map = (function () {
   var
     configMap = {
       main_html : String()
-        + '<canvas id="theCanvas"></canvas>'
+        + '<canvas id="pacmanAI-map-theCanvas"></canvas>'
     },
     stateMap  = {},
     jqueryMap = {},
@@ -104,7 +104,7 @@ pacmanAI.map = (function () {
         pacman,
         clyde
       ],
-      theCanvas = $("#theCanvas"),
+      theCanvas = $("#pacmanAI-map-theCanvas"),
       thingsThatCareAboutThePassageOfTime = [
         judge,
         clyde
