@@ -5,21 +5,20 @@
   white  : true
 */
 
-/*global $, pacmanAI, Circle, Point, ObjectThatDraws, Pacman */
+/*global $, pacmanAI, Circle, Point, Pacman */
 
 pacmanAI.model.ghostFactory = (function () {
 	var
-    circle,             objectThatDraws, map,
+    objectThatDraws,    map,
 		speedInPixelsPerMS, currentPath,     pacmansPosition, ghostProto, makeGhost;
 
-    circle = new Circle(new Point(0, 0), 20);
-    objectThatDraws = new ObjectThatDraws();
     speedInPixelsPerMS = 60 / 1000;
 
   ghostProto = {
-    name : 'Clyde',
+    name        : 'Clyde',
     strokeColor : 'red',
     fillColor   : 'red',
+    circle      : new Circle(new Point(0, 0), 20),
     ChoosePath : function () {
       var shortestPathToPacman, map;
       map = this.Map();
@@ -48,12 +47,9 @@ pacmanAI.model.ghostFactory = (function () {
     },
     Position : function (point) {
       if (arguments.length === 0) {
-        return circle.Center;
+        return this.circle.Center;
       }
-      circle.Center = point;
-    },
-    Draw : function () {
-      objectThatDraws.DrawFilledCircle(circle, this.strokeColor, this.fillColor);
+      this.circle.Center = point;
     },
     FollowPath : function (path, distance) {
       var newDistance;

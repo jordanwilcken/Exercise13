@@ -13,7 +13,9 @@
   white  : true
 */
 
-/*global $, pacmanAI */
+/*global $, LineSegment, Point, Pacman, Clyde, Map, Game, Judge,
+         ObjectThatDraws, Point, pacmanAI, TimeSpan
+*/
 
 pacmanAI.map = (function () {
   'use strict';
@@ -100,16 +102,13 @@ pacmanAI.map = (function () {
       game = new Game(pacman, { Clyde: clyde }, map),
       judge = new Judge(game),
       objectThatDraws = new ObjectThatDraws(),
-      thingsToDrawOnMap = [
-        pacman,
-        clyde
-      ],
       theCanvas = $("#pacmanAI-map-theCanvas"),
       thingsThatCareAboutThePassageOfTime = [
         judge,
         clyde
       ];
 
+    pacmanAI.model.ghosts.add(clyde);
     theCanvas.attr("width", "500");
     theCanvas.attr("height", "500");
     theCanvas.on("click", function (event) {
@@ -139,7 +138,7 @@ pacmanAI.map = (function () {
           thingsThatCareAboutThePassageOfTime[j].ResolveTimePassing(timeSpan);
         }
       }
-      setTimeout(onTwentyMillisecondTimeout, 25);
+      //setTimeout(onTwentyMillisecondTimeout, 25);
     };
     setTimeout(onTwentyMillisecondTimeout, 25);
 
@@ -152,11 +151,10 @@ pacmanAI.map = (function () {
         this.TimeOfPreviousCall = new Date();
         objectThatDraws.Clear();
         map.Draw();
-        for (j = 0; j < thingsToDrawOnMap.length; ++j) {
-          thingsToDrawOnMap[j].Draw();
-        }
+        objectThatDraws.DrawFilledCircle(pacman.circle, pacman.strokeColor, pacman.fillColor);
+        objectThatDraws.DrawFilledCircle(clyde.circle, clyde.strokeColor, clyde.fillColor);
       }
-      setTimeout(on100MillisecondTimeout, 50);
+      //setTimeout(on100MillisecondTimeout, 50);
     };
     setTimeout(on100MillisecondTimeout, 50);
 

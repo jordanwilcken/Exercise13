@@ -2,3 +2,28 @@
   margin    : auto;
   max-width : 600px;
 }
+
+.pacmanAI-button {
+	text-align			: center;
+	padding				: 0.2em 1em;
+	border				: 0.15em solid black;
+	border-radius		: 0.5em;
+	background-color    : white;
+	width				: 5em;
+}
+
+	.pacmanAI-button:hover {
+		background-color : #aaa;
+	}
+
+.pacmanAI-key, .pacmanAI-value, .pacmanAI-value-input {
+	float : left;
+}
+
+.pacmanAI-value, .pacmanAI-value-input {
+	margin : 0 0 0 0.5em;
+}
+
+.pacmanAI-value  {
+  overflow : hidden;
+}

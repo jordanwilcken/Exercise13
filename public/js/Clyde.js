@@ -1,11 +1,13 @@
 var Circle, Pacman, Point, ObjectThatDraws, Path;
 
 function Clyde() {
-	var circle, strokeColor, fillColor, objectThatDraws, map,
+	var
+    map,
 		speedInPixelsPerMS, currentPath, pacmansPosition;
-	strokeColor = fillColor = "red";
-	circle = new Circle(new Point(0, 0), 20);
-	objectThatDraws = new ObjectThatDraws();
+	this.strokeColor = "red";
+  this.fillColor = 'red';
+	this.circle = new Circle(new Point(0, 0), 20);
+  this.name = 'Clyde';
 	speedInPixelsPerMS = 60 / 1000;
 
 	this.ChoosePath = function () {
@@ -39,13 +41,9 @@ function Clyde() {
 
 	this.Position = function (point) {
 		if (arguments.length === 0) {
-			return circle.Center;
+			return this.circle.Center;
 		}
-		circle.Center = point;
-	};
-
-	this.Draw = function () {
-		objectThatDraws.DrawFilledCircle(circle, strokeColor, fillColor);
+		this.circle.Center = point;
 	};
 
 	this.FollowPath = function (path, distance) {

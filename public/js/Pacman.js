@@ -1,20 +1,16 @@
 var Circle, Point, ObjectThatDraws;
 
 function Pacman() {
-	var position, circle, strokeColor, fillColor, objectThatDraws;
-	strokeColor = fillColor = "yellow";
+	var position;
+	this.strokeColor = "yellow";
+  this.fillColor = 'yellow';
 	position = new Point(100, 100);
-	circle = new Circle(position, 20);
-	objectThatDraws = new ObjectThatDraws();
+	this.circle = new Circle(position, 20);
 
 	this.Position = function (point) {
 		if (arguments.length === 0) {
-			return circle.Center;
+			return this.circle.Center;
 		}
-		circle.Center = point;
-	};
-
-	this.Draw = function () {
-		objectThatDraws.DrawFilledCircle(circle, strokeColor, fillColor);
+		this.circle.Center = point;
 	};
 }

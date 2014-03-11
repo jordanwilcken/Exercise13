@@ -30,13 +30,4 @@
 .pacmanAI-ghostList-add, .pacmanAI-ghostList-delete,
 .pacmanAI-ghostList-admit, .pacmanAI-ghostList-eject {
   margin				: 0 0 5px 0;
-  text-align		: center;
-  padding				: 0.2em;
-  border				: 1px solid black;
-  border-radius : 0.5em;
 }
-  
-	.pacmanAI-ghostList-add:hover, .pacmanAI-ghostList-delete:hover,
-	.pacmanAI-ghostList-admit:hover, .pacmanAI-ghostList-eject:hover {
-		background-color: #aaa;
-	}

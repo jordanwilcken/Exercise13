@@ -4,3 +4,69 @@
   height		: 200px;
   position		: relative;
 }
+
+.pacmanAI-shell-modal {
+	visibility: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	background-color	: rgba(122, 122, 122, 0.8);
+}
+	.pacmanAI-shell-modal-content {
+		position					: relative;
+		background-color	: white;
+		border 						: 0.2em solid black;
+		margin						: 10em auto 0 auto;
+		width							: 26em;
+		height						: 15.5em;
+	}
+
+	.pacmanAI-shell-modal-ghost-name-value,
+	.pacmanAI-shell-modal-ghost-strokeColor-value,
+	.pacmanAI-shell-modal-ghost-fillColor-value {
+		width : 7em;
+	}
+
+	.pacmanAI-shell-modal-ghost-name,
+	.pacmanAI-shell-modal-ghost-strokeColor,
+	.pacmanAI-shell-modal-ghost-fillColor {
+		position : absolute;
+	}
+
+	.pacmanAI-shell-modal-ghost-name {
+		top				: 1em;
+		right			: 1em;
+	}
+
+	.pacmanAI-shell-modal-ghost-strokeColor, .pacmanAI-shell-modal-ghost-fillColor {
+ 	  left		 : 2em;
+	}	
+
+	.pacmanAI-shell-modal-ghost-strokeColor {
+		top : 4em;
+	}
+
+	.pacmanAI-shell-modal-ghost-fillColor {
+		top : 6em;
+	}
+
+	.pacmanAI-shell-modal-ghost-preview {
+		border		: 0.1em solid black;
+		position	: absolute;
+		bottom 		: 3em;
+		right			: 1em;
+	}
+
+	.pacmanAI-shell-modal-buttons {
+		position	: absolute;
+		right			: 1em;
+		bottom		: 0.5em;
+		cursor		: default;
+	}
+
+	.pacmanAI-shell-modal-add, .pacmanAI-shell-modal-close {
+		float : left;
+	}
