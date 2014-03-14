@@ -29,10 +29,10 @@ pacmanAI.util_b = (function () {
         "'" : '&#39;',
         '>' : '&#62;',
         '<' : '&#60;'
-      }
+      } 
     },
 
-    decodeHtml,  encodeHtml, getEmSize;
+    decodeHtml,  encodeHtml, getEmSize, getIsLegitimateCssColor;
 
   configMap.encode_noamp_map = $.extend(
     {}, configMap.html_encode_map
@@ -88,11 +88,24 @@ pacmanAI.util_b = (function () {
   };
   // End getEmSize
 
+  // Begin getIsLegitimateCssColor
+  getIsLegitimateCssColor = function (testColor) {
+    var 
+      $obj = $('<div/>'),
+      isLegit = $obj
+        .css('background-color', testColor)
+        .css('background-color')
+        .length > 0;
+    return isLegit;
+  };
+  // End getIsLegitimateCssColor
+
   // export methods
   return {
-    decodeHtml : decodeHtml,
-    encodeHtml : encodeHtml,
-    getEmSize  : getEmSize
+    decodeHtml               : decodeHtml,
+    encodeHtml               : encodeHtml,
+    getEmSize                : getEmSize,
+    getIsLegitimateCssColor  : getIsLegitimateCssColor
   };
   //------------------- END PUBLIC METHODS ---------------------
 }());

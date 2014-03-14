@@ -47,6 +47,10 @@ pacmanAI.map = (function () {
 
   //------------------- BEGIN EVENT HANDLERS -------------------
   // example: onClickButton = ...
+  // 
+
+  onAdmittedChange = function (event) {
+  };
   //-------------------- END EVENT HANDLERS --------------------
 
 
@@ -158,6 +162,8 @@ pacmanAI.map = (function () {
     };
     setTimeout(on100MillisecondTimeout, 50);
 
+    $.gevent.subscribe(jqueryMap.$container, 'admitted-ghosts-changed', onAdmittedChange);
+    
     return true;
   };
   // End public method /initModule/

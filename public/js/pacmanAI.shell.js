@@ -76,7 +76,7 @@ pacmanAI.shell = (function () {
     var
       input_html,           on_value_click,       on_focusout,            circle,
       canvas,               draw_obj,             last_valid_strokeColor, potential_strokeColor,
-      last_valid_fillColor, potential_fillColor,
+      last_valid_fillColor, potential_fillColor,  on_keyup,
       $modal_window = jqueryMap.$modal;
 
     $modal_window.html('<div class="pacmanAI-shell-modal-content"></div>');
@@ -84,59 +84,122 @@ pacmanAI.shell = (function () {
 
     on_value_click = function (event) {
       var
-        returned_elements, input_object_key, value_object_key,
-        width;
+        returned_elements, width, input_element, input_length;
       
       if (/name/.test(event.target.classList[0])) {
-        input_object_key = '$name_input';
-        value_object_key = '$name_value';
+        width = jqueryMap.$name_value.css('width');
+        jqueryMap.$name_input.css('width', width);
+
+        returned_elements =  jqueryMap.$name_value.
+          replaceWith(jqueryMap.$name_input);
+        jqueryMap.$name_value = $(returned_elements)
+          .click(on_value_click);
+      
+        input_element = jqueryMap.$name_input[0];
+        input_length = jqueryMap.$name_input.val().length;
       } else if (/strokeColor/.test(event.target.classList[0])) {
-        input_object_key = '$strokeColor_input';
-        value_object_key = '$strokeColor_value';
+        width = jqueryMap.$strokeColor_value.css('width');
+        jqueryMap.$strokeColor_input.css('width', width);
+
+        returned_elements = jqueryMap.$strokeColor_value
+          .replaceWith(jqueryMap.$strokeColor_input);
+        jqueryMap.$strokeColor_value = $(returned_elements)
+          .click(on_value_click);
+
+        input_element = jqueryMap.$strokeColor_input[0];
+        input_length = jqueryMap.$strokeColor_input.val().length;
       } else if (/fillColor/.test(event.target.classList[0])) {
-        input_object_key = '$fillColor_input';
-        value_object_key = '$fillColor_value';
+        width = jqueryMap.$fillColor_value.css('width');
+        jqueryMap.$fillColor_input.css('width', width);
+
+        returned_elements = jqueryMap.$fillColor_value
+          .replaceWith(jqueryMap.$fillColor_input);
+        jqueryMap.$fillColor_value = $(returned_elements)
+          .click(on_value_click);
+
+        input_element = jqueryMap.$fillColor_input[0];
+        input_length = jqueryMap.$fillColor_input.val().length;
       }
 
-      width = jqueryMap[value_object_key].css('width');
-      jqueryMap[input_object_key].css('width', width);
-      returned_elements = jqueryMap[value_object_key].replaceWith(jqueryMap[input_object_key]);
-      jqueryMap[input_object_key][0].setSelectionRange(0, jqueryMap[input_object_key].val().length);
-      jqueryMap[value_object_key] = $(returned_elements)
-        .click(on_value_click);
+      input_element.setSelectionRange(0, input_length);
     };
-    on_focusout = function () {
+    on_focusout = function (event) {
       var
-        returned_elements, input_object_key, value_object_key,
-        is_replacing_with_text = false;
+        returned_elements;
 
       if (/name/.test(event.target.classList[0])) {
-        is_replacing_with_text = true;
-        input_object_key = '$name_input';
-        value_object_key = '$name_value';
+        jqueryMap.$name_value.html(jqueryMap.$name_input.val());
+        returned_elements = jqueryMap.$name_input.replaceWith(jqueryMap.$name_value);
+        jqueryMap.$name_input = $(returned_elements)
+          .focusout(on_focusout);
       } else if (/strokeColor/.test(event.target.classList[0])) {
         potential_strokeColor = jqueryMap.$strokeColor_input.val();
-        if (pacmanAI.util.getIsLegitimateCssColor()) {
-          jqueryMap.$strokeColor_value.css('background-color', jqueryMap.$strokeColor_input.val());
+        if (pacmanAI.util_b.getIsLegitimateCssColor(potential_strokeColor)) {
+          jqueryMap.$strokeColor_value.css('background-color', potential_strokeColor);
+          last_valid_strokeColor = potential_strokeColor;
+
+          draw_obj.Clear();
+          draw_obj.DrawFilledCircle(
+            circle,
+            last_valid_strokeColor,
+            jqueryMap.$fillColor_value.css('background-color')
+          );
         } else {
           jqueryMap.$strokeColor_input.val(last_valid_strokeColor);
         }
-        returned_elements = jqueryMap[input_object_key].replaceWith(jqueryMap[value_object_key]);
-        jqueryMap[input_object_key] = $(returned_elements)
-          .focusout(on_focusout);
+        returned_elements = jqueryMap.$strokeColor_input
+          .replaceWith(jqueryMap.$strokeColor_value);
+        jqueryMap.$strokeColor_input = $(returned_elements)
+          .focusout(on_focusout)
+          .keyup(on_keyup);
       } else if (/fillColor/.test(event.target.classList[0])) {
-        input_object_key = '$fillColor_input';
-        value_object_key = '$fillColor_value';
-      }
+        potential_fillColor = jqueryMap.$fillColor_input.val(); 
+        if (pacmanAI.util_b.getIsLegitimateCssColor(potential_fillColor)) {
+          jqueryMap.$fillColor_value.css('background-color', potential_fillColor);
+          last_valid_fillColor = potential_fillColor;
 
-      if (is_replacing_with_text) {
-        jqueryMap[value_object_key].html(jqueryMap[input_object_key].val());
-      } else {
-        jqueryMap[value_object_key].css('background-color', jqueryMap[input_object_key].val());
+          draw_obj.Clear();
+          draw_obj.DrawFilledCircle(
+            circle,
+            jqueryMap.$strokeColor_value.css('background-color'),
+            last_valid_fillColor
+          );
+        } else {
+          jqueryMap.$fillColor_input.val(last_valid_fillColor);
+        }
+        returned_elements = jqueryMap.$fillColor_input
+          .replaceWith(jqueryMap.$fillColor_value);
+        jqueryMap.$fillColor_input = $(returned_elements)
+          .focusout(on_focusout)
+          .keyup(on_keyup);
       }
-      returned_elements = jqueryMap[input_object_key].replaceWith(jqueryMap[value_object_key]);
-      jqueryMap[input_object_key] = $(returned_elements)
-        .focusout(on_focusout);
+    };
+    on_keyup = function (event) {
+      var
+        $target;
+      if (/strokeColor/.test(event.target.classList[0])) {
+        $target = $(event.target);
+        potential_strokeColor = $target.val();
+        if (/^#[A-Fa-f0-9]{6}$/.test(potential_strokeColor)) {
+          draw_obj.Clear();
+          draw_obj.DrawFilledCircle(
+            circle,
+            potential_strokeColor,
+            jqueryMap.$fillColor_value.css('background-color')
+          );
+        }
+      } else if (/fillColor/.test(event.target.classList[0])) {
+        $target = $(event.target);
+        potential_fillColor = $target.val();
+        if (/^#[A-Fa-f0-9]{6}$/.test(potential_fillColor)) {
+          draw_obj.Clear();
+          draw_obj.DrawFilledCircle(
+            circle,
+            jqueryMap.$strokeColor_value.css('background-color'),
+            potential_fillColor
+          );
+        }
+      }
     };
 
     input_html = String()
@@ -152,7 +215,8 @@ pacmanAI.shell = (function () {
         + '<input class="pacmanAI-shell-modal-ghost-strokeColor-input pacmanAI-value-input">'
         + '</input>';
     jqueryMap.$strokeColor_input = $(input_html)
-      .focusout(on_focusout);
+      .focusout(on_focusout)
+      .keyup(on_keyup);
     last_valid_strokeColor = 'black';
     jqueryMap.$strokeColor_value = $('.pacmanAI-shell-modal-ghost-strokeColor-value')
       .click(on_value_click)
@@ -163,7 +227,8 @@ pacmanAI.shell = (function () {
         + '<input class="pacmanAI-shell-modal-ghost-fillColor-input pacmanAI-value-input">'
         + '</input>';
     jqueryMap.$fillColor_input = $(input_html)
-      .focusout(on_focusout);
+      .focusout(on_focusout)
+      .keyup(on_keyup);
     last_valid_fillColor = 'red';
     jqueryMap.$fillColor_value = $('.pacmanAI-shell-modal-ghost-fillColor-value')
       .click(on_value_click)

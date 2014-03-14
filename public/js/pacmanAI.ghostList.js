@@ -23,10 +23,10 @@ pacmanAI.ghostList = (function () {
       main_html : String()
         + '<div class="pacmanAI-ghostList-list"></div>'
         + '<div class="pacmanAI-ghostList-buttons">'
-          + '<div class="pacmanAI-ghostList-add">Add</div>'
-          + '<div class="pacmanAI-ghostList-delete">Delete</div>'
-          + '<div class="pacmanAI-ghostList-admit">Admit to Map</div>'
-          + '<div class="pacmanAI-ghostList-eject">Remove from Map</div>'
+          + '<div class="pacmanAI-ghostList-add pacmanAI-button">Add</div>'
+          + '<div class="pacmanAI-ghostList-delete pacmanAI-button">Delete</div>'
+          + '<div class="pacmanAI-ghostList-admit pacmanAI-button">Admit to Map</div>'
+          + '<div class="pacmanAI-ghostList-eject pacmanAI-button">Remove from Map</div>'
         + '</div>',
       settable_map : {
         ghosts_model  : true,
@@ -38,8 +38,8 @@ pacmanAI.ghostList = (function () {
     stateMap  = {},
     jqueryMap = {},
 
-    setJqueryMap, configModule,     initModule,       onTapAdd, onTapDelete,
-    onListChange, onSelectedChange, onAdmittedChange, makeListHtml;
+    setJqueryMap, configModule,     initModule,       onTapAdd,     onTapDelete,
+    onListChange, onSelectedChange, onAdmittedChange, makeListHtml, onTapList;
   //----------------- END MODULE SCOPE VARIABLES ---------------
 
   //------------------- BEGIN UTILITY METHODS ------------------
@@ -84,9 +84,18 @@ pacmanAI.ghostList = (function () {
   };
 
   onSelectedChange = function (evnt) {
-    $('div', jqueryMap.$container).each(function (itemDiv, idx) {
-      //if the selected taffy has a guy with your name you are selected
-      //otherwise you are not.
+    var
+      name, ghost, $item_div,
+      selected_ghosts_taffy = TAFFY(configMap.ghosts_model.get_selected());
+
+    $.each($('.pacmanAI-ghostList-item, .pacmanAI-ghostList-item-selected'), function (idx, itemDiv) {
+      $item_div = $(itemDiv);
+      name = $item_div.attr('data-id');
+      if (selected_ghosts_taffy({ name : name }).first()) {
+        $item_div.attr('class', 'pacmanAI-ghostList-item-selected');
+      } else {
+        $item_div.attr('class', 'pacmanAI-ghostList-item');
+      }
     });
   };
 
@@ -96,6 +105,26 @@ pacmanAI.ghostList = (function () {
   onTapAdd = function (evnt) {
     configMap.on_tap_add();
   };
+
+  onTapAdmit = function (event) {
+    var
+      $orig_target = $(event.orig_target),
+      name = $orig_target.attr('data-id'),
+    if (name.length > 0) {
+      configMap.ghosts_model.admit(name); 
+    }
+  };
+
+  onTapList = function (event) {
+    var
+      $orig_target = $(event.orig_target),
+      name = $orig_target.attr('data-id'),
+      ghost = configMap.ghosts_model.get_by_name(name);
+
+    if (ghost) {
+      configMap.ghosts_model.set_selected([ghost]);
+    }
+  }
 
   onTapDelete = function (evnt) {
     var
@@ -146,7 +175,7 @@ pacmanAI.ghostList = (function () {
     setJqueryMap();
     
     $container.html(configMap.main_html);
-    jqueryMap.$list = $('.pacmanAI-ghostList-list');
+    jqueryMap.$list = $('.pacmanAI-ghostList-list').on('utap', onTapList);
     jqueryMap.$add = $('.pacmanAI-ghostList-add').on('utap', onTapAdd);
     jqueryMap.$delete = $('pacmanAI-ghostList-delete').on('utap', onTapDelete);
     $.gevent.subscribe(jqueryMap.$container, 'pacmanAI-listchange', onListChange);

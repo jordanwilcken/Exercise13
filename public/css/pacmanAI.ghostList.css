@@ -8,9 +8,10 @@
 .pacmanAI-ghostList-list {
   border: 2px solid black;
   left	: 1em;
+	overflow-y	: scroll;
 }
 
-.pacmanAI-ghostList-item {
+.pacmanAI-ghostList-item, .pacmanAI-ghostList-item-selected {
   min-width : 300px;
   padding   : 5px 0 5px 10px;
 } 
@@ -18,9 +19,10 @@
 	.pacmanAI-ghostList-item:hover {
 		background-color : #00BFFF;
 	}
-	.pacmanAI-ghostList-item.pacmanAI-x-select {
-    background-color : #6495ED;
-	}
+
+.pacmanAI-ghostList-item-selected {
+	background-color : #6495ED;
+}
 
 .pacmanAI-ghostList-buttons {
   right 		: 8em;
