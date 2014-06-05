@@ -128,7 +128,7 @@ pacmanAI.shell = (function () {
         returned_elements;
 
       if (/name/.test(event.target.classList[0])) {
-        jqueryMap.$name_value.html(jqueryMap.$name_input.val());
+        jqueryMap.$name_value.html(pacmanAI.util_b.encodeHtml(jqueryMap.$name_input.val()));
         returned_elements = jqueryMap.$name_input.replaceWith(jqueryMap.$name_value);
         jqueryMap.$name_input = $(returned_elements)
           .focusout(on_focusout);

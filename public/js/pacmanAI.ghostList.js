@@ -39,7 +39,8 @@ pacmanAI.ghostList = (function () {
     jqueryMap = {},
 
     setJqueryMap, configModule,     initModule,       onTapAdd,     onTapDelete,
-    onListChange, onSelectedChange, onAdmittedChange, makeListHtml, onTapList;
+    onListChange, onSelectedChange, onAdmittedChange, makeListHtml, onTapList,
+    onTapAdmit, onTapEject;
   //----------------- END MODULE SCOPE VARIABLES ---------------
 
   //------------------- BEGIN UTILITY METHODS ------------------
@@ -88,13 +89,14 @@ pacmanAI.ghostList = (function () {
       name, ghost, $item_div,
       selected_ghosts_taffy = TAFFY(configMap.ghosts_model.get_selected());
 
-    $.each($('.pacmanAI-ghostList-item, .pacmanAI-ghostList-item-selected'), function (idx, itemDiv) {
-      $item_div = $(itemDiv);
-      name = $item_div.attr('data-id');
-      if (selected_ghosts_taffy({ name : name }).first()) {
-        $item_div.attr('class', 'pacmanAI-ghostList-item-selected');
-      } else {
-        $item_div.attr('class', 'pacmanAI-ghostList-item');
+    $.each($('.pacmanAI-ghostList-item, .pacmanAI-ghostList-item-selected'),
+      function (idx, itemDiv) {
+        $item_div = $(itemDiv);
+        name = $item_div.attr('data-id');
+        if (selected_ghosts_taffy({ name : name }).first()) {
+          $item_div.attr('class', 'pacmanAI-ghostList-item-selected');
+        } else {
+          $item_div.attr('class', 'pacmanAI-ghostList-item');
       }
     });
   };
@@ -107,12 +109,15 @@ pacmanAI.ghostList = (function () {
   };
 
   onTapAdmit = function (event) {
-    var
-      $orig_target = $(event.orig_target),
-      name = $orig_target.attr('data-id'),
-    if (name.length > 0) {
-      configMap.ghosts_model.admit(name); 
-    }
+      configMap.ghosts_model.get_selected().forEach(function (ghost) {
+        configMap.ghosts_model.admit(ghost.name);
+      }); 
+  };
+
+  onTapEject = function (event) {
+      configMap.ghosts_model.get_selected().forEach(function (ghost) {
+        configMap.ghosts_model.eject(ghost.name);
+      }); 
   };
 
   onTapList = function (event) {
@@ -124,7 +129,7 @@ pacmanAI.ghostList = (function () {
     if (ghost) {
       configMap.ghosts_model.set_selected([ghost]);
     }
-  }
+  };
 
   onTapDelete = function (evnt) {
     var
@@ -177,7 +182,9 @@ pacmanAI.ghostList = (function () {
     $container.html(configMap.main_html);
     jqueryMap.$list = $('.pacmanAI-ghostList-list').on('utap', onTapList);
     jqueryMap.$add = $('.pacmanAI-ghostList-add').on('utap', onTapAdd);
-    jqueryMap.$delete = $('pacmanAI-ghostList-delete').on('utap', onTapDelete);
+    jqueryMap.$delete = $('.pacmanAI-ghostList-delete').on('utap', onTapDelete);
+    jqueryMap.$admit = $('.pacmanAI-ghostList-admit').on('utap', onTapAdmit);
+    jqueryMap.$eject = $('.pacmanAI-ghostList-eject').on('utap', onTapEject);
     $.gevent.subscribe(jqueryMap.$container, 'pacmanAI-listchange', onListChange);
     $.gevent.subscribe(jqueryMap.$container, 'selected-ghosts-changed', onSelectedChange);
     $.gevent.subscribe(jqueryMap.$container, 'admitted-ghosts-changed', onAdmittedChange);

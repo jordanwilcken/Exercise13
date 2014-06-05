@@ -135,7 +135,7 @@ pacmanAI.model = (function () {
       } 
 
       admitted_ghosts.push(stateMap.ghosts_taffy({ name : name }).first());
-      $.gevent.publish('admitted-ghosts-changed', admitted_ghosts);
+      $.gevent.publish('admitted-ghosts-changed', [admitted_ghosts]);
     };
 
     eject = function(name) {
@@ -146,7 +146,7 @@ pacmanAI.model = (function () {
       for (j = 0; j < admitted_ghosts.length; ++j) {
         if (admitted_ghosts[j].name === name) {
           admitted_ghosts.splice(j, 1);
-          $.gevent.publish('admitted-ghosts-changed', admitted_ghosts);
+          $.gevent.publish('admitted-ghosts-changed', [admitted_ghosts]);
           return;
         }
       }

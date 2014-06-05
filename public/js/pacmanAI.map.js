@@ -28,7 +28,9 @@ pacmanAI.map = (function () {
     stateMap  = {},
     jqueryMap = {},
 
-    setJqueryMap, configModule, initModule;
+    setJqueryMap, configModule, initModule, onAdmittedGhostsChanged,
+    map,
+    admittedGhosts = [];
   //----------------- END MODULE SCOPE VARIABLES ---------------
 
   //------------------- BEGIN UTILITY METHODS ------------------
@@ -49,7 +51,25 @@ pacmanAI.map = (function () {
   // example: onClickButton = ...
   // 
 
-  onAdmittedChange = function (event) {
+  onAdmittedGhostsChanged = function (event, ghostList) {
+    var
+      newlyAdmittedGhosts = [],
+      somePoint = new Point(0, 0);
+
+    ghostList.forEach(function (ghost) {
+      if (!admittedGhosts.some(function (previouslyAdmittedGhost) {
+        return previouslyAdmittedGhost.name === ghost.name;
+      })) {
+        newlyAdmittedGhosts.push(ghost);
+      }
+    });
+
+    newlyAdmittedGhosts.forEach(function (ghost) {
+      ghost.set_Map(map);
+      ghost.Position(map.GetPointClosestTo(somePoint));
+    });
+
+    admittedGhosts = ghostList; 
   };
   //-------------------- END EVENT HANDLERS --------------------
 
@@ -102,7 +122,6 @@ pacmanAI.map = (function () {
       },
       pacman = new Pacman(),
       clyde = new Clyde(),
-      map = new Map(makeMapLines(), makeMapPortals()),
       game = new Game(pacman, { Clyde: clyde }, map),
       judge = new Judge(game),
       objectThatDraws = new ObjectThatDraws(),
@@ -112,6 +131,7 @@ pacmanAI.map = (function () {
         clyde
       ];
 
+    map = new Map(makeMapLines(), makeMapPortals());
     pacmanAI.model.ghosts.add(clyde);
     theCanvas.attr("width", "500");
     theCanvas.attr("height", "500");
@@ -156,13 +176,15 @@ pacmanAI.map = (function () {
         objectThatDraws.Clear();
         map.Draw();
         objectThatDraws.DrawFilledCircle(pacman.circle, pacman.strokeColor, pacman.fillColor);
-        objectThatDraws.DrawFilledCircle(clyde.circle, clyde.strokeColor, clyde.fillColor);
+        admittedGhosts.forEach( function (ghost) {
+          objectThatDraws.DrawFilledCircle(ghost.circle, ghost.strokeColor, ghost.fillColor);
+        });
       }
-      //setTimeout(on100MillisecondTimeout, 50);
+      setTimeout(on100MillisecondTimeout, 100);
     };
-    setTimeout(on100MillisecondTimeout, 50);
+    setTimeout(on100MillisecondTimeout, 100);
 
-    $.gevent.subscribe(jqueryMap.$container, 'admitted-ghosts-changed', onAdmittedChange);
+    $.gevent.subscribe(jqueryMap.$container, 'admitted-ghosts-changed', onAdmittedGhostsChanged);
     
     return true;
   };
