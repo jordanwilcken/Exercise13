@@ -69,7 +69,7 @@ pacmanAI.map = (function () {
       ghost.Position(map.GetPointClosestTo(somePoint));
     });
 
-    admittedGhosts = ghostList; 
+    admittedGhosts = ghostList.slice(); 
   };
   //-------------------- END EVENT HANDLERS --------------------
 
@@ -157,12 +157,13 @@ pacmanAI.map = (function () {
         timeBetweenCalls = new Date() - this.TimeOfPreviousCall;
         this.TimeOfPreviousCall = new Date();
         timeSpan = new TimeSpan(timeBetweenCalls, "ms");
-        clyde.observeEnemy(pacman);
-        for (j = 0; j < thingsThatCareAboutThePassageOfTime.length; ++j) {
-          thingsThatCareAboutThePassageOfTime[j].ResolveTimePassing(timeSpan);
-        }
+        admittedGhosts.forEach( function (ghost) {
+          ghost.observeEnemy(pacman);
+          ghost.ResolveTimePassing(timeSpan);
+        });
       }
-      //setTimeout(onTwentyMillisecondTimeout, 25);
+
+      setTimeout(onTwentyMillisecondTimeout, 25);
     };
     setTimeout(onTwentyMillisecondTimeout, 25);
 
@@ -178,6 +179,7 @@ pacmanAI.map = (function () {
         objectThatDraws.DrawFilledCircle(pacman.circle, pacman.strokeColor, pacman.fillColor);
         admittedGhosts.forEach( function (ghost) {
           objectThatDraws.DrawFilledCircle(ghost.circle, ghost.strokeColor, ghost.fillColor);
+          ghost.ChoosePath();
         });
       }
       setTimeout(on100MillisecondTimeout, 100);

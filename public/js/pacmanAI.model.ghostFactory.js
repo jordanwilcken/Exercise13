@@ -9,49 +9,12 @@
 
 pacmanAI.model.ghostFactory = (function () {
 	var
-    objectThatDraws,    map,
-		speedInPixelsPerMS, currentPath,     pacmansPosition, ghostProto, makeGhost;
-
+    objectThatDraws,
+		ghostProto, makeGhost,
     speedInPixelsPerMS = 60 / 1000;
 
   ghostProto = {
-    name        : 'Clyde',
-    strokeColor : 'red',
-    fillColor   : 'red',
-    circle      : new Circle(new Point(0, 0), 20),
-    ChoosePath : function () {
-      var shortestPathToPacman, map;
-      map = this.Map();
-      if (undefined === map) {
-        //some default path for when we have no map
-        return;
-      }
-      if (undefined === pacmansPosition) {
-        throw new Error("Clyde doesn't know where Pacman is.");
-      }
-      shortestPathToPacman = map.getShortestPathFromAToB(this.Position(), pacmansPosition);
-      if (undefined === shortestPathToPacman) {
-        //throw new Error("Clyde.js says 'There is no way to get to Pacman!'");
-      } else {
-        currentPath = shortestPathToPacman;
-      }
-    },
-    get_Map : function() {
-      return map;
-    },
-    set_Map : function (value) {
-      if (arguments.length === 0) {
-        return map;
-      }
-      map = value;
-    },
-    Position : function (point) {
-      if (arguments.length === 0) {
-        return this.circle.Center;
-      }
-      this.circle.Center = point;
-    },
-    FollowPath : function (path, distance) {
+    FollowPath  : function (path, distance) {
       var newDistance;
       newDistance = path.getDistanceAtPoint(this.Position()) + distance;
       if (newDistance > path.length()) {
@@ -60,36 +23,82 @@ pacmanAI.model.ghostFactory = (function () {
         this.Position(path.getPointAt(newDistance));
       }
     },
-    observeEnemy : function (enemy) {
-      if (enemy instanceof Pacman) {
-        pacmansPosition = enemy.Position();
-      } else {
-        pacmansPosition = undefined;
-      }
-    },
     ResolveTimePassing : function (timeSpan) {
       var milliseconds;
       milliseconds = timeSpan.ToMilliseconds();
       if (milliseconds === 0) {
         return;
       }
-      if (undefined !== currentPath) {
-        this.FollowPath(currentPath, speedInPixelsPerMS * milliseconds);
+      if (undefined !== this.currentPath) {
+        this.FollowPath(this.currentPath, speedInPixelsPerMS * milliseconds);
       }
     }
   };
 
   makeGhost = function (attr_map) {
-    var theGhost = Object.create(ghostProto);
+    var
+      enemy,
+      theGhost = Object.create(ghostProto);
+
     if (attr_map.hasOwnProperty('name') && attr_map.name.length > 0) {
       theGhost.name = attr_map.name;
+    } else {
+      theGhost.name = 'Clyde';
     }
+
     if (attr_map.hasOwnProperty('strokeColor') && attr_map.name.length > 0) {
       theGhost.strokeColor = attr_map.strokeColor;
+    } else {
+      theGhost.strokeColor = 'red';
     }
+
     if (attr_map.hasOwnProperty('fillColor') && attr_map.name.length > 0) {
       theGhost.fillColor = attr_map.fillColor;
+    } else {
+      theGhost.fillColor = 'red';
     }
+
+    theGhost.circle = new Circle(new Point(0, 0), 20);
+
+    theGhost.ChoosePath = function () {
+      var shortestPathToPacman;
+      if (undefined === this.map) {
+        //some default path for when we have no map
+        return;
+      }
+      if (undefined === enemy || enemy.Position() === undefined) {
+        return;
+      }
+      shortestPathToPacman = this.map.getShortestPathFromAToB(this.Position(), enemy.Position());
+      if (undefined === shortestPathToPacman) {
+        //throw new Error("Clyde.js says 'There is no way to get to Pacman!'");
+      } else {
+        this.currentPath = shortestPathToPacman;
+      }
+    };
+
+    theGhost.observeEnemy = function (enemyArg) {
+      enemy = enemyArg;
+    };
+
+    theGhost.get_Map = function() {
+      return this.map;
+    };
+
+    theGhost.set_Map = function (value) {
+      if (arguments.length === 0) {
+        return this.map;
+      }
+      this.map = value;
+    };
+
+    theGhost.Position = function (point) {
+      if (arguments.length === 0) {
+        return this.circle.Center;
+      }
+      this.circle.Center = point;
+    };
+
     return theGhost;
   };
 

@@ -19,7 +19,7 @@ pacmanAI.model = (function () {
   'use strict';
   var
     ghosts, initModule, setisDataReal,
-    isDataReal = false;
+    isDataReal = true;
 
   // The ghosts object API
   // _____________________

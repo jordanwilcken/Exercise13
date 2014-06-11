@@ -117,6 +117,7 @@ pacmanAI.ghostList = (function () {
   onTapEject = function (event) {
       configMap.ghosts_model.get_selected().forEach(function (ghost) {
         configMap.ghosts_model.eject(ghost.name);
+        ghost.currentPath = undefined;
       }); 
   };
 
@@ -134,7 +135,7 @@ pacmanAI.ghostList = (function () {
   onTapDelete = function (evnt) {
     var
       ghost_db, 
-      selectedGhosts = configMap.ghosts_model.get_selected_ghosts();
+      selectedGhosts = configMap.ghosts_model.get_selected();
     if (selectedGhosts.length === 0)
     {
       return;
