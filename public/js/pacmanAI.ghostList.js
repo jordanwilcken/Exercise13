@@ -135,15 +135,17 @@ pacmanAI.ghostList = (function () {
   onTapDelete = function (evnt) {
     var
       ghost_db, 
-      selectedGhosts = configMap.ghosts_model.get_selected();
+      selectedGhosts = configMap.ghosts_model.get_selected(),
+      isConfirmed = false;
     if (selectedGhosts.length === 0)
     {
       return;
     }
 
-    //if they confirm the delete
-    ghost_db = configMap.ghosts_model.get_db();
-    //use ghost_db to remove those ghosts
+    isConfirmed = confirm("Delete this ghost?");
+    if (isConfirmed) {
+      configMap.ghosts_model.dlete(selectedGhosts[0].name);
+    }
   };
 
   //-------------------- END EVENT HANDLERS --------------------

@@ -240,11 +240,13 @@ pacmanAI.shell = (function () {
       var
       ghosts, strokeColor, fillColor,
       name = $('.pacmanAI-shell-modal-ghost-name-value').html();
-
       if (name.length === 0) {
         alert('Your ghost needs a name.');
         return;
       }
+
+      strokeColor = jqueryMap.$strokeColor_value.css('background-color'),
+      fillColor = jqueryMap.$fillColor_value.css('background-color');
       ghosts = pacmanAI.model.ghosts;
       if (ghosts.get_taffy()( { name : name } ).first()) {
         alert('Sorry, that name is taken.');

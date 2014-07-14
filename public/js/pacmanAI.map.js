@@ -121,18 +121,15 @@ pacmanAI.map = (function () {
         return [];
       },
       pacman = new Pacman(),
-      clyde = new Clyde(),
-      game = new Game(pacman, { Clyde: clyde }, map),
+      game = new Game(pacman, {}, map),
       judge = new Judge(game),
       objectThatDraws = new ObjectThatDraws(),
       theCanvas = $("#pacmanAI-map-theCanvas"),
       thingsThatCareAboutThePassageOfTime = [
-        judge,
-        clyde
+        judge
       ];
 
     map = new Map(makeMapLines(), makeMapPortals());
-    pacmanAI.model.ghosts.add(clyde);
     theCanvas.attr("width", "500");
     theCanvas.attr("height", "500");
     theCanvas.on("click", function (event) {
@@ -143,11 +140,6 @@ pacmanAI.map = (function () {
       pointClicked = new Point(canvasX, canvasY);
       pacman.Position(map.GetPointClosestTo(pointClicked));
     });
-
-    clyde.set_Map(map);
-    clyde.Position(map.GetPointClosestTo(new Point(0, 0)));
-    clyde.observeEnemy(pacman);
-    clyde.ChoosePath();
 
     onTwentyMillisecondTimeout = function () {
       var timeSpan, timeBetweenCalls, j;

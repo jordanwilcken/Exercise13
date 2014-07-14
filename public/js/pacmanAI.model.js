@@ -186,6 +186,7 @@ pacmanAI.model = (function () {
       set_selected(stateMap.selected_ghosts);
     };
     sio.on('listchange', _on_listchange);
+    sio.on('publish-ghost-list', _on_listchange);
 
     return {
       get_selected : get_selected,
@@ -202,7 +203,8 @@ pacmanAI.model = (function () {
 
   initModule = function () {
     var
-      ghost_list, j, ghost_map, theGhost;
+      ghost_list, j, ghost_map, theGhost,
+      sio = isDataReal ? pacmanAI.data.getSio() : pacmanAI.fake.mockSio;
     if (!isDataReal)
     {
       ghost_list = pacmanAI.fake.getGhostList();
@@ -215,6 +217,8 @@ pacmanAI.model = (function () {
         });
         ghosts.add(theGhost);
       }
+    } else {
+      sio.emit('ghosts-wanted');
     }
   };
 

@@ -9,20 +9,17 @@
     "name" : {
       "type"      : "string",
       "minLength" : 1,
-      "maxLength" : 25,
-      "required"  : true
+      "maxLength" : 25
     },
     "strokeColor" : {
       "type"      : "string",
       "minLength" : 1,
-      "maxLength" : 25,
-      "required"  : true
+      "maxLength" : 25
     },
     "fillColor": {
       "type"      : "string",
       "minLength" : 1,
-      "maxLength" : 25,
-      "required"  : true
+      "maxLength" : 25
     }
   }
 }
