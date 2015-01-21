@@ -17,6 +17,7 @@ var
   express = require( 'express'  ),
   routes  = require( './lib/routes' ),
 
+  port = process.env.PORT || 3000,
   app     = express(),
   server  = http.createServer( app );
 // ------------- END MODULE SCOPE VARIABLES ---------------
@@ -45,7 +46,7 @@ routes.configRoutes( app, server );
 // -------------- END SERVER CONFIGURATION ----------------
 
 // ----------------- BEGIN START SERVER -------------------
-server.listen( 3000 );
+server.listen( port );
 console.log(
   'Express server listening on port %d in %s mode',
    server.address().port, app.settings.env
