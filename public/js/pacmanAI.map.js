@@ -110,11 +110,26 @@ pacmanAI.map = (function () {
     var onTwentyMillisecondTimeout, on100MillisecondTimeout,
       makeMapLines = function () {
         return [
-          new LineSegment(new Point(30, 30), new Point(30, 470)),
-          new LineSegment(new Point(30, 470), new Point(470, 470)),
-          new LineSegment(new Point(470, 470), new Point(470, 30)),
-          new LineSegment(new Point(470, 30), new Point(30, 30)),
-          new LineSegment(new Point(30, 470), new Point(200, 200))
+
+          //Perimeter lines
+          new LineSegment(new Point(175, 30), new Point(325, 30)),
+          new LineSegment(new Point(325, 30), new Point(325, 180)),
+          new LineSegment(new Point(325, 180), new Point(475, 180)),
+          new LineSegment(new Point(475, 180), new Point(475, 330)),
+          new LineSegment(new Point(475, 330), new Point(325, 330)),
+          new LineSegment(new Point(325, 330), new Point(325, 480)),
+          new LineSegment(new Point(325, 480), new Point(175, 480)),
+          new LineSegment(new Point(175, 480), new Point(175, 330)),
+          new LineSegment(new Point(175, 330), new Point(25, 330)),
+          new LineSegment(new Point(25, 330), new Point(25, 180)),
+          new LineSegment(new Point(25, 180), new Point(175, 180)),
+          new LineSegment(new Point(175, 180), new Point(175, 30)),
+
+          //Interior square
+          new LineSegment(new Point(175, 180), new Point(325, 180)),
+          new LineSegment(new Point(325, 180), new Point(325, 330)),
+          new LineSegment(new Point(325, 330), new Point(175, 330)),
+          new LineSegment(new Point(175, 330), new Point(175, 180))
         ];
       },
       makeMapPortals = function () {

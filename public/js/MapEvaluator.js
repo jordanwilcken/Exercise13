@@ -128,25 +128,25 @@ function MapEvaluator() {
 					//our lines have proportional directions
 					t = {};
 					if (line1.ContainsPoint(line2.Point1, t)) {
-						if (t.value > 0 || t.value < 1) {
+						if (t.value > 0 && t.value < 1) {
 							return false;
 						}
 						t.value = undefined;
 					}
 					if (line1.ContainsPoint(line2.Point2, t)) {
-						if (t.value > 0 || t.value < 1) {
+						if (t.value > 0 && t.value < 1) {
 							return false;
 						}
 						t.value = undefined;
 					}
 					if (line2.ContainsPoint(line1.Point1, t)) {
-						if (t.value > 0 || t.value < 1) {
+						if (t.value > 0 && t.value < 1) {
 							return false;
 						}
 						t.value = undefined;
 					}
 					if (line2.ContainsPoint(line1.Point2, t)) {
-						if (t.value > 0 || t.value < 1) {
+						if (t.value > 0 && t.value < 1) {
 							return false;
 						}
 						t.value = undefined;
