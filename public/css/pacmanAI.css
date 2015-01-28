@@ -1,3 +1,7 @@
+p {
+  font-size: 20px;
+}
+
 #pacmanAI {
   margin    : auto;
   max-width : 600px;

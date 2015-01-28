@@ -25,6 +25,11 @@ pacmanAI.shell = (function () {
         + '<div class="pacmanAI-shell-main">'
           + '<div class="pacmanAI-shell-ghostList"></div>'
           + '<div class="pacmanAI-shell-map"></div>'
+          + '<div>'
+            + '<p>The yellow circle is Pacman.  The only way to move him is by clicking around the map.</p>'
+            + '<p>Up top you\'ll see your standard "list of ghosts".  The buttons neighboring the list are for managing ghosts.  Other than the powers granted you by the above buttons the ghosts cannot be controlled.  They are utterly mad, and their only thought is to "Attack the Pacman!"</p>'
+            + '<p>In keeping with the original Pacman, this is the only level, and it never ends.</p>'
+          + '</div>'
         + '</div>'
         + '<div class="pacmanAI-shell-foot"></div>'
         + '<div class="pacmanAI-shell-modal"></div>',
